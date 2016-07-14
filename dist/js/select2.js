@@ -1332,8 +1332,15 @@ S2.define('select2/selection/base',[
       this._tabindex = this.$element.attr('tabindex');
     }
 
+    if (this.$element.data('old-accesskey') != null) {
+      this._accesskey = this.$element.data('old-accesskey');
+    } else if (this.$element.attr('accesskey') != null) {
+      this._accesskey = this.$element.attr('accesskey');
+    }
+
     $selection.attr('title', this.$element.attr('title'));
     $selection.attr('tabindex', this._tabindex);
+    $selection.attr('accesskey', this._accesskey);
 
     this.$selection = $selection;
 
@@ -5049,6 +5056,12 @@ S2.define('select2/core',[
     $element.data('old-tabindex', tabindex);
     $element.attr('tabindex', '-1');
 
+    // Set up the accesskey
+
+    var accesskey = $element.attr('accesskey') || '';
+    $element.data('old-accesskey', accesskey);
+    $element.attr('accesskey', '');
+
     // Set up containers and adapters
 
     var DataAdapter = this.options.get('dataAdapter');
@@ -5597,6 +5610,7 @@ S2.define('select2/core',[
 
     this.$element.off('.select2');
     this.$element.attr('tabindex', this.$element.data('old-tabindex'));
+    this.$element.attr('accesskey', this.$element.data('old-accesskey'));
 
     this.$element.removeClass('select2-hidden-accessible');
     this.$element.attr('aria-hidden', 'false');
